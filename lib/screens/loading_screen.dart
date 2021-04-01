@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/services/location.dart';
+import 'package:http/http.dart' as http;
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -7,12 +8,20 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  void getLocation() async {
-    print('Get Location Invoked');
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.bestForNavigation);
-    print('Position is : $position');
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
   }
+
+  void getLocation() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+    print(location.latitude);
+    print(location.longitude);
+  }
+
+  void getData() {}
 
   @override
   Widget build(BuildContext context) {
