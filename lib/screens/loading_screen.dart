@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/services/location.dart';
-import 'package:http/http.dart' as http;
+import 'package:weather_app/screens/location_screen.dart';
+
+import 'package:weather_app/services/weather.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -11,14 +13,20 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    getLocation();
+    getLocationData();
   }
 
-  void getLocation() async {
-    Location location = Location();
-    await location.getCurrentLocation();
-    print(location.latitude);
-    print(location.longitude);
+  void getLocationData() async {
+    var weatherData = await WeatherModel().getLocationWeather();
+    print(' weather data called : $weatherData');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(
+          locationWeather: weatherData,
+        ),
+      ),
+    );
   }
 
   void getData() {}
@@ -27,13 +35,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            print('Get Location Called');
-            getLocation();
-          },
-          child: Text('Get My Location'),
+        child: SpinKitDoubleBounce(
+          color: Colors.white,
+          size: 100.0,
         ),
+
+        // child: Center(
+        //   child: Text('Hello'),
+        // ),
       ),
     );
   }
